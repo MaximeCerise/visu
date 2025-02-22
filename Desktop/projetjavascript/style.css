@@ -1,0 +1,30 @@
+a/* Ajoutez ces styles */
+.indicator-group {
+  margin: 15px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+
+.indicator-select {
+  width: 300px;
+  margin-right: 15px;
+}
+
+.weight-slider {
+  width: 200px;
+  vertical-align: middle;
+}
+
+.weight-value {
+  display: inline-block;
+  width: 50px;
+  text-align: right;
+}
+#chart-container {
+  position: absolute;
+  top: 200px;
+  right: 20px;
+  width: 550px; /* Ajustez la largeur à vos besoins */
+  
+}
