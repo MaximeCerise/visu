@@ -4,8 +4,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // =========================
   // 0) Dimensions / Sélection
   // =========================
-  const width = 800,
-        height = 500;
+  const width = 1200,
+        height = 800;
 
   // Sélection du SVG + création d'un groupe principal pour le zoom/pan
   const svg = d3.select("#map")
@@ -15,22 +15,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // =========================
   // (Optionnel) Filtre d’ombre portée
-  // =========================
-  const defs = svg.append("defs");
-  const filter = defs.append("filter")
-                     .attr("id", "drop-shadow")
-                     .attr("width", "150%")
-                     .attr("height", "150%");
-  filter.append("feGaussianBlur")
-        .attr("in", "SourceAlpha")
-        .attr("stdDeviation", 2);
-  filter.append("feOffset")
-        .attr("dx", 2)
-        .attr("dy", 2)
-        .attr("result", "offsetblur");
-  const feMerge = filter.append("feMerge");
-  feMerge.append("feMergeNode").attr("in", "offsetblur");
-  feMerge.append("feMergeNode").attr("in", "SourceGraphic");
+
 
   // =========================
   // 1) Configuration du zoom/pan
@@ -88,7 +73,7 @@ document.addEventListener("DOMContentLoaded", function() {
       .append("path")
         .attr("d", path)
         .attr("fill", "#e0e0e0")
-        .attr("stroke", "#999")
+        .attr("stroke", "#ffffff")
         .attr("stroke-width", 0.5)
         .attr("filter", "url(#drop-shadow)")
         // Lorsqu'on clique sur un pays
@@ -161,7 +146,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Calculer la valeur max pour l'échelle
     const maxValue = d3.max(filtered, d => d.Value) || 0;
-    const colorScale = d3.scaleSequential(d3.interpolateBlues)
+
+    // Créer une échelle de couleur allant du gris (#808080) au vert (#7fff00)
+    const colorScale = d3.scaleSequential(d3.interpolateRgb("#222222", "#7fff00"))
       .domain([0, maxValue]);
 
     // Colorer chaque pays
@@ -171,9 +158,9 @@ document.addEventListener("DOMContentLoaded", function() {
       .attr("fill", function(d) {
         const code = d.properties.iso_a3 || d.id;
         const rec = filtered.find(item => item.Country_Code === code);
-        return rec ? colorScale(rec.Value) : "#e0e0e0";
+        return rec ? colorScale(rec.Value) : "#222222"; // Blanc par défaut si aucune donnée
       });
-  }
+}
 
   // =========================
   // handleCountryClick : au clic sur la carte
@@ -189,7 +176,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
     marker.append("circle")
       .attr("r", 10)
-      .attr("fill", "#ff6b6b")
+      .attr("fill", "#7fff00")
       .attr("stroke", "#fff")
       .attr("stroke-width", 2);
 
@@ -289,7 +276,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Couleurs
     const color = d3.scaleOrdinal()
       .domain([country1, country2])
-      .range(["#0077b6", "#ffb703"]);
+      .range(["#7fff00", "#ffffff"]);
 
     // Groupes par indicateur
     const group = svg.selectAll(".group")
@@ -410,8 +397,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Préparer un tableau pour tracer 2 lignes
     const countriesData = [
-      { name: country1, color: "#1f77b4", data: dataC1 },
-      { name: country2, color: "#ff7f0e", data: dataC2 }
+      { name: country1, color: "#7fff00", data: dataC1 },
+      { name: country2, color: "#ffffff", data: dataC2 }
     ];
 
     // Dessiner les 2 lignes avec animation
@@ -422,7 +409,7 @@ document.addEventListener("DOMContentLoaded", function() {
           .datum(cObj.data)
           .attr("fill", "none")
           .attr("stroke", cObj.color)
-          .attr("stroke-width", 2)
+          .attr("stroke-width", 4)
           .attr("d", line);
 
         // Animation stroke-dasharray

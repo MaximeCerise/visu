@@ -10,38 +10,33 @@
   <script defer src="script.js"></script>
   <!-- (Optionnel) Script du graphique radar, si vous l’utilisez -->
   <script defer src="radar.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Marck+Script&family=Shrikhand&display=swap" rel="stylesheet">
 </head>
 <body>
   <header>
-    <h1>WaterWise – Accès à l'Eau</h1>
+    <h1>WaterWise</h1>
   </header>
 
   <!-- Zone de contrôles -->
+  <div class = "intro">
+    <a> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc eu purus odio. Interdum et malesuada fames ac ante ipsum primis in faucibus. Cras quis libero ac tortor scelerisque malesuada. Phasellus vitae auctor leo. Fusce at turpis quis lectus vehicula feugiat. Curabitur auctor sem lobortis enim ultricies, at placerat purus condimentum. Aenean dignissim metus suscipit nulla blandit, non placerat arcu mattis. Duis venenatis magna sit amet tortor consectetur eleifend. Nullam ac congue purus. Donec sit amet erat aliquam, consectetur massa in, aliquet arcu. Quisque vestibulum nunc eros, a blandit lacus fermentum nec. Nam aliquam, dui ac tincidunt aliquam, leo massa egestas orci, non bibendum tortor nibh vel dui. Curabitur luctus in nibh vitae efficitur. Vestibulum sit amet risus magna.
+
+    Aenean condimentum, lectus sed egestas laoreet, elit ipsum dignissim eros, condimentum suscipit diam erat et tellus. Sed ultrices, neque at tempus lobortis, erat diam luctus tortor, id vehicula ante augue at diam. </a>
+  </div>
   <div id="controls">
-
-    <div class="control-item">
-      <label for="year-slider">Année :</label>
-      <input type="range" id="year-slider" min="2012" max="2022" value="2022">
-      <span id="selected-year">2022</span>
-    </div>
-
     <div class="control-item">
       <label for="indicator-select">Indicateur :</label>
       <select id="indicator-select"></select>
     </div>
 
     <!-- Contrôles pour comparer deux pays -->
-    <div class="control-item comparison-controls">
-      <label for="country-select-1">Pays 1 :</label>
-      <select id="country-select-1"></select>
-    
-      <label for="country-select-2">Pays 2 :</label>
-      <select id="country-select-2"></select>
-    
-      
+    <div class="control-item">
+      <label for="year-slider">Année :</label>
+      <input type="range" id="year-slider" min="2012" max="2022" value="2022">
+      <span id="selected-year">2022</span>
     </div>
-    
-    
 
   </div>
 
@@ -49,7 +44,17 @@
   <div id="map-container">
     <svg id="map" width="800" height="500"></svg>
   </div>
-
+  <div class="control-item comparison-controls">
+    <div>
+      <label for="country-select-1">Pays 1 :</label>
+      <select id="country-select-1"></select>
+    </div>
+    <div>
+      <label for="country-select-2">Pays 2 :</label>
+      <select id="country-select-2"></select>
+    </div>
+  </div>
+    
   <!-- Conteneur pour le graphique en ligne (line chart) -->
   <div id="chart-container"></div>
 
