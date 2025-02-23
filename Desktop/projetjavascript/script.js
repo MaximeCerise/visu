@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
   // 0) Dimensions / Sélection
   // =========================
   const width = 1200,
-        height = 800;
+        height = 600;
 
   // Sélection du SVG + création d'un groupe principal pour le zoom/pan
   const svg = d3.select("#map")
@@ -29,8 +29,8 @@ document.addEventListener("DOMContentLoaded", function() {
   // 2) Projection et géopath
   // =========================
   const projection = d3.geoNaturalEarth1()
-    .scale(160)
-    .translate([width / 2, height / 2]);
+    .scale(250)
+    .translate([width/2.05, height/1.7 ]);
   const path = d3.geoPath().projection(projection);
 
   // =========================
@@ -147,7 +147,7 @@ document.addEventListener("DOMContentLoaded", function() {
     // Calculer la valeur max pour l'échelle
     const maxValue = d3.max(filtered, d => d.Value) || 0;
 
-    // Créer une échelle de couleur allant du gris (#808080) au vert (#7fff00)
+    // Créer une échelle de couleur allant du gris (#222222) au vert (#7fff00)
     const colorScale = d3.scaleSequential(d3.interpolateRgb("#222222", "#7fff00"))
       .domain([0, maxValue]);
 
@@ -158,8 +158,77 @@ document.addEventListener("DOMContentLoaded", function() {
       .attr("fill", function(d) {
         const code = d.properties.iso_a3 || d.id;
         const rec = filtered.find(item => item.Country_Code === code);
-        return rec ? colorScale(rec.Value) : "#222222"; // Blanc par défaut si aucune donnée
+        return rec ? colorScale(rec.Value) : "#222222"; // Couleur par défaut si aucune donnée
       });
+
+    // =========================
+    // Ajouter ou mettre à jour la légende continue
+    // =========================
+
+    // Supprimer l'ancienne légende (si elle existe)
+    svg.select(".legend").remove();
+
+    // Créer un groupe pour la légende
+    const legend = svg.append("g")
+        .attr("class", "legend")
+        .attr("transform", `translate(${width - width + 20}, ${height - 140})`); // Position de la légende
+
+    // Définir les dimensions de la légende
+    const legendWidth = 20;
+    const legendHeight = 120;
+
+    // Créer un dégradé linéaire
+    const gradientId = "legend-gradient";
+    svg.append("defs")
+        .append("linearGradient")
+            .attr("id", gradientId)
+            .attr("x1", "0%") // Début du dégradé (en bas)
+            .attr("x2", "0%") // Fin du dégradé (en haut)
+            .attr("y1", "100%")
+            .attr("y2", "0%")
+        .selectAll("stop")
+            .data([
+                { offset: "0%", color: "#222222" }, // Couleur de départ
+                { offset: "100%", color: "#7fff00" } // Couleur d'arrivée
+            ])
+            .enter()
+            .append("stop")
+                .attr("offset", d => d.offset)
+                .attr("stop-color", d => d.color);
+
+    // Dessiner un rectangle avec le dégradé
+    legend.append("rect")
+        .attr("x", 0)
+        .attr("y", 0)
+        .attr("width", legendWidth)
+        .attr("height", legendHeight)
+        .style("fill", `url(#${gradientId})`);
+
+    // Ajouter des étiquettes de texte (min et max)
+    legend.append("text")
+        .attr("x", legendWidth + 5) // Position horizontale par rapport au rectangle
+        .attr("y", 0)
+        .text(maxValue.toFixed(2)) // Valeur maximale
+        .style("font-size", "12px")
+        .style("fill", "#ffffff")
+        .style("alignment-baseline", "hanging"); // Alignement en haut
+
+    legend.append("text")
+        .attr("x", legendWidth + 5)
+        .attr("y", legendHeight)
+        .text("0.00") // Valeur minimale
+        .style("font-size", "12px")
+        .style("fill", "#ffffff")
+        .style("alignment-baseline", "baseline"); // Alignement en bas
+
+    // Ajouter un titre à la légende
+    legend.append("text")
+        .attr("x", 0)
+        .attr("y", -20) // Position au-dessus du rectangle
+        .text("en %")
+        .style("font-size", "14px")
+        .style("font-weight", "bold")
+        .style("fill", "#ffffff");
 }
 
   // =========================
@@ -184,6 +253,7 @@ document.addEventListener("DOMContentLoaded", function() {
     marker.append("text")
       .attr("x", 15)
       .attr("y", 5)
+      .attr("fill", "#ffffff")  
       .text(countryName);
 
     // Logique pour remplir #country-select-1 ou #country-select-2
@@ -243,9 +313,9 @@ document.addEventListener("DOMContentLoaded", function() {
     d3.select("#compare-bar-chart").html("");
 
     // Dimensions
-    const margin = { top: 20, right: 20, bottom: 80, left: 70 },
-          width = 700 - margin.left - margin.right,
-          height = 450 - margin.top - margin.bottom;
+    const margin = { top: 30, right: 20, bottom: 300, left: 200 },
+          width = 1200 - margin.left - margin.right,
+          height = 800 - margin.top - margin.bottom;
 
     // Création du SVG
     const svg = d3.select("#compare-bar-chart")
@@ -319,9 +389,10 @@ document.addEventListener("DOMContentLoaded", function() {
     // Titre du bar chart
     svg.append("text")
       .attr("x", width / 2)
-      .attr("y", -5)
+      .attr("y", -10)
       .attr("text-anchor", "middle")
       .style("font-size", "16px")
+      .attr("fill", "#ffffff") // Nouvelle couleur du texte (noir)
       .text(`Comparaison de ${country1} et ${country2} - Année ${year}`);
   }
 
@@ -359,9 +430,9 @@ document.addEventListener("DOMContentLoaded", function() {
     d3.select("#chart-container").html("");
 
     // Dimensions
-    const margin = { top: 20, right: 30, bottom: 40, left: 50 },
-          chartWidth = 600 - margin.left - margin.right,
-          chartHeight = 300 - margin.top - margin.bottom;
+    const margin = { top: 30, right: 30, bottom: 30, left: 30 },
+          chartWidth = 1000 - margin.left - margin.right,
+          chartHeight = 500 - margin.top - margin.bottom;
 
     // Création du SVG
     const svgChart = d3.select("#chart-container")
@@ -439,6 +510,7 @@ document.addEventListener("DOMContentLoaded", function() {
     g.append("text")
       .attr("x", chartWidth / 2)
       .attr("y", -5)
+      .attr("fill", "#ffffff")
       .attr("text-anchor", "middle")
       .style("font-size", "16px")
       .text(chartTitle);
@@ -468,8 +540,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
     // Dimensions
     const margin = { top: 20, right: 30, bottom: 40, left: 50 },
-          chartWidth = 600 - margin.left - margin.right,
-          chartHeight = 300 - margin.top - margin.bottom;
+          chartWidth = 1000 - margin.left - margin.right,
+          chartHeight = 500 - margin.top - margin.bottom;
 
     const svgChart = d3.select("#chart-container")
       .append("svg")
